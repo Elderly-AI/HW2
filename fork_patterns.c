@@ -41,7 +41,7 @@ const size_t core_count, const char **array, const size_t array_size, const char
 	const size_t pattern_length = strlen(pattern);
 	unsigned long long int pattern_counter = 0;
 
-	for(int c = 0; c < core_count; ++c){
+	for(size_t c = 0; c < core_count; ++c){
 		pid[c] = fork();
 		if(pid[c] == -1){
 			exit(EAGAIN);
