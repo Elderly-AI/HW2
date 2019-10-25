@@ -33,12 +33,13 @@ install:
     - source ci/travis/install-$TRAVIS_OS_NAME
 
 script:
-    - gcc -g -Wall -Wextra -c patterns.c
+    - gcc -g -Wall -Wextra -std=c99 -c patterns.c
+    - ls
     - ar rc libpatterns.a patterns.o
     - ranlib libpatterns.a
-    - gcc -g -Wall -Wextra -fPIC -c fork_patterns.c
-    - gcc -g -Wall -Wextra -shared -o libfork_patterns.so fork_patterns.o
-    - gcc -g -Wall -Wextra -L. -lpatterns -shared -o libfork_patterns.so fork_patterns.o
+    - gcc -g -Wall -Wextra -std=c99 -fPIC -c fork_patterns.c
+    - gcc -g -Wall -Wextra -std=c99 -shared -o libfork_patterns.so fork_patterns.o
+    - gcc -g -Wall -Wextra -std=c99 -L. -lpatterns -shared -o libfork_patterns.so fork_patterns.o
     - LD_LIBRARY_PATH="." time ./test
     - LD_LIBRARY_PATH="." time ./fork_test
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./test ; fi
