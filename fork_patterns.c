@@ -34,7 +34,6 @@ const size_t core_count, const char **array, const size_t array_size, const char
 
 	pid_t pid[core_count];
 	int status = 0;
-	int fork_id = -1;
 	int fd[2];
 	pipe(fd);
 
