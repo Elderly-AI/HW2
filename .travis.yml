@@ -44,9 +44,6 @@ script:
     - gcc -g -Wall -Wextra -std=c99 fork_test.c -L. -lfork_patterns -lpatterns -o fork_test
     - LD_LIBRARY_PATH="." time ./test
     - LD_LIBRARY_PATH="." time ./fork_test
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./test ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./fork_test ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cppcheck --error-exitcode=1 --enable=warning,performance,information,style *.c *.h ; fi
     - mkdir build
     - cd build
     - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
