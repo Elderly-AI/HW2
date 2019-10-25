@@ -97,11 +97,11 @@ size_t read_array(char ***array, const char *file_name){
 	return(array_size);
 }
 
-bool emotion_test(const char** array, const size_t array_size,
+bool fork_emotion_test(const char** array, const size_t array_size,
 const char *good_pattern, const char *bad_pattern){
 
-	return((long long int)(pattern_entity_in_array(array, array_size, good_pattern) -
-		    (long long int)(pattern_entity_in_array(array, array_size, bad_pattern))) > 0);
+	return(((long long int)(fork_pattern_entity_in_array(CORE_COUNT, array, array_size, good_pattern) -
+		    (long long int)fork_pattern_entity_in_array(CORE_COUNT, array, array_size, bad_pattern))) > 0);
 }
 
 int main(){
