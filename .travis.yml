@@ -40,6 +40,8 @@ script:
     - gcc -g -Wall -Wextra -std=c99 -fPIC -c fork_patterns.c
     - gcc -g -Wall -Wextra -std=c99 -shared -o libfork_patterns.so fork_patterns.o
     - gcc -g -Wall -Wextra -std=c99 -L. -lpatterns -shared -o libfork_patterns.so fork_patterns.o
+    - gcc -g -Wall -Wextra test.c -L. -lfork_patterns -lpatterns -o test
+    - gcc -g -Wall -Wextra fork_test.c -L. -lfork_patterns -lpatterns -o fork_test
     - LD_LIBRARY_PATH="." time ./test
     - LD_LIBRARY_PATH="." time ./fork_test
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all ./test ; fi
