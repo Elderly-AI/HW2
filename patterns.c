@@ -24,11 +24,11 @@ unsigned int pattern_entity(const char *array, const char *pattern,
 
   unsigned int pattern_counter = 0;
 
-  for (const char *line = strstr(array, pattern); line != NULL;) {
-    line += pattern_len;
-    ++pattern_counter;
-
-    line = strstr(line, pattern);
+  const char *line = strstr(array, pattern);
+  while(line != NULL){
+  	++pattern_counter;
+  	line += pattern_len;
+  	line = strstr(line, pattern);
   }
 
   return (pattern_counter);
