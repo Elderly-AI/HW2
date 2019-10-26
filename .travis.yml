@@ -46,6 +46,8 @@ script:
     - LD_LIBRARY_PATH="." time ./fork_test
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cpplint --filter=-readability,-whitespace,-legal/copyright,-build *.c *.h ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cppcheck cppcheck --enable=all --suppress=missingIncludeSystem . *.c *.h ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --leak-check=full --show-leak-kinds=all ./test ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then valgrind --leak-check=full --show-leak-kinds=all ./fork_test ; fi
     - mkdir build
     - cd build
     - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
