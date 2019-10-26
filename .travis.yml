@@ -34,7 +34,6 @@ install:
 
 script:
     - gcc -g -Wall -Wextra -std=c99 -c patterns.c
-    - ls
     - ar rc libpatterns.a patterns.o
     - ranlib libpatterns.a
     - gcc -g -Wall -Wextra -std=c11 -fPIC -c fork_patterns.c
@@ -48,7 +47,6 @@ script:
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cppcheck cppcheck --enable=all --suppress=missingIncludeSystem . *.c *.h ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then LD_LIBRARY_PATH="." valgrind --leak-check=full --show-leak-kinds=all ./test ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then LD_LIBRARY_PATH="." valgrind --leak-check=full --show-leak-kinds=all ./fork_test ; fi
-    - gcov *.c
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov -t "coverage" -o coverage.info -c -d . ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then genhtml -o report coverage.info ; fi
     - mkdir build
