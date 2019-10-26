@@ -7,10 +7,6 @@
 диграфов :(; в противном случае переписка признается пессимистичной.
 */
 
-#define SIZE_T_LINE_LENGTH 128
-#define CHAR_LINE_LENGTH "127"
-#define CORE_COUNT 4
-
 #include <assert.h>
 #include <errno.h>
 #include <stdbool.h>
