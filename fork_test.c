@@ -15,7 +15,6 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -98,13 +97,11 @@ size_t read_array(char ***array, const char *file_name) {
 
 bool fork_emotion_test(const char **array, const size_t array_size,
                        const char *good_pattern, const char *bad_pattern) {
-  return (((long long int)(fork_pattern_entity_in_array(
-                               CORE_COUNT, array, array_size, good_pattern) -
-                           (long long int)fork_pattern_entity_in_array(
-                               CORE_COUNT, array, array_size, bad_pattern))) >
-          0);
+  return (((fork_pattern_entity_in_array(CORE_COUNT, array, array_size,
+                                         good_pattern) -
+            fork_pattern_entity_in_array(CORE_COUNT, array, array_size,
+                                         bad_pattern))) > 0);
 }
-
 int main() {
   char **array;
   size_t array_size = 0;
