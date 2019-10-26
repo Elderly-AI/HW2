@@ -1,0 +1,55 @@
+dist:     trusty    
+sudo:     required  
+
+language: c         
+                    
+os:    
+    - linux
+    
+compiler:
+    - gcc
+    
+before_script:
+  - pip3 install --user cpplint
+    
+addons:
+  apt:
+    packages:
+      - valgrind
+      - cppcheck
+      - make
+      - cmake
+      - python3
+      - python3-pip
+      - lcov
+
+env:
+    - TARGET_CPU=amd64 BUILD_CONFIGURATION=Debug
+    - TARGET_CPU=amd64 BUILD_CONFIGURATION=Release
+    - TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
+    - TARGET_CPU=x86 BUILD_CONFIGURATION=Release
+
+install:
+    - source ci/travis/install-$TRAVIS_OS_NAME
+
+script:
+    - gcc -g -Wall -Wextra -std=c99 -c patterns.c
+    - ar rc libpatterns.a patterns.o
+    - ranlib libpatterns.a
+    - gcc -g -Wall -Wextra -std=c11 -fPIC -c fork_patterns.c
+    - gcc -g -Wall -Wextra -std=c11 -shared -o libfork_patterns.so fork_patterns.o
+    - gcc -g -Wall -Wextra -std=c11 -L. -lpatterns -shared -o libfork_patterns.so fork_patterns.o
+    - gcc --coverage -g -Wall -Wextra -std=c11 test.c -L. -lfork_patterns -lpatterns -o test
+    - gcc --coverage -g -Wall -Wextra -std=c11 fork_test.c -L. -lfork_patterns -lpatterns -o fork_test
+    - LD_LIBRARY_PATH="." time ./test
+    - LD_LIBRARY_PATH="." time ./fork_test
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cpplint --filter=-readability,-whitespace,-legal/copyright,-build *.c *.h ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cppcheck cppcheck --enable=all --suppress=missingIncludeSystem . *.c *.h ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then LD_LIBRARY_PATH="." valgrind --leak-check=full --show-leak-kinds=all ./test ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then LD_LIBRARY_PATH="." valgrind --leak-check=full --show-leak-kinds=all ./fork_test ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov -t "coverage" -o coverage.info -c -d . ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then genhtml -o report coverage.info ; fi
+    - mkdir build
+    - cd build
+    - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
+    - cmake --build .
