@@ -50,6 +50,7 @@ script:
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then LD_LIBRARY_PATH="." valgrind --leak-check=full --show-leak-kinds=all ./fork_test ; fi
     - gcov *.c
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov -t "coverage" -o coverage.info -c -d . ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then genhtml -o report coverage.info ; fi
     - mkdir build
     - cd build
     - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
