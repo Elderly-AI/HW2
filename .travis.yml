@@ -40,14 +40,15 @@ script:
     - gcc -g -Wall -Wextra -std=c11 -fPIC -c fork_patterns.c
     - gcc -g -Wall -Wextra -std=c11 -shared -o libfork_patterns.so fork_patterns.o
     - gcc -g -Wall -Wextra -std=c11 -L. -lpatterns -shared -o libfork_patterns.so fork_patterns.o
-    - gcc -g -Wall -Wextra -std=c11 test.c -L. -lfork_patterns -lpatterns -o test
-    - gcc -g -Wall -Wextra -std=c11 fork_test.c -L. -lfork_patterns -lpatterns -o fork_test
+    - gcc --coverage -g -Wall -Wextra -std=c11 test.c -L. -lfork_patterns -lpatterns -o test
+    - gcc --coverage -g -Wall -Wextra -std=c11 fork_test.c -L. -lfork_patterns -lpatterns -o fork_test
     - LD_LIBRARY_PATH="." time ./test
     - LD_LIBRARY_PATH="." time ./fork_test
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cpplint --filter=-readability,-whitespace,-legal/copyright,-build *.c *.h ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cppcheck cppcheck --enable=all --suppress=missingIncludeSystem . *.c *.h ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then LD_LIBRARY_PATH="." valgrind --leak-check=full --show-leak-kinds=all ./test ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then LD_LIBRARY_PATH="." valgrind --leak-check=full --show-leak-kinds=all ./fork_test ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then lcov -t "coverage.info" -o coverage.info -c -d . ; fi
     - mkdir build
     - cd build
     - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
