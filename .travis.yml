@@ -37,11 +37,11 @@ script:
     - ls
     - ar rc libpatterns.a patterns.o
     - ranlib libpatterns.a
-    - gcc -g -Wall -Wextra -std=c99 -fPIC -c fork_patterns.c
-    - gcc -g -Wall -Wextra -std=c99 -shared -o libfork_patterns.so fork_patterns.o
-    - gcc -g -Wall -Wextra -std=c99 -L. -lpatterns -shared -o libfork_patterns.so fork_patterns.o
-    - gcc -g -Wall -Wextra -std=c99 test.c -L. -lfork_patterns -lpatterns -o test
-    - gcc -g -Wall -Wextra -std=c99 fork_test.c -L. -lfork_patterns -lpatterns -o fork_test
+    - gcc -g -Wall -Wextra -std=c11 -fPIC -c fork_patterns.c
+    - gcc -g -Wall -Wextra -std=c11 -shared -o libfork_patterns.so fork_patterns.o
+    - gcc -g -Wall -Wextra -std=c11 -L. -lpatterns -shared -o libfork_patterns.so fork_patterns.o
+    - gcc -g -Wall -Wextra -std=c11 test.c -L. -lfork_patterns -lpatterns -o test
+    - gcc -g -Wall -Wextra -std=c11 fork_test.c -L. -lfork_patterns -lpatterns -o fork_test
     - LD_LIBRARY_PATH="." time ./test
     - LD_LIBRARY_PATH="." time ./fork_test
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then cpplint --filter=-readability,-whitespace,-legal/copyright,-build *.c *.h ; fi
